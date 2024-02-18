@@ -7,7 +7,14 @@ const router = express.Router();
 
 /* GET users listing. */
 router.get("/", function (req, res, next) {
-  res.send("respond with a resource");
+  if (req.user.admin) {
+    res.send("respond with a resource");
+    return next();
+  } else {
+    const err = new Error("You are not authorized to access this page!");
+    err.status = 401;
+    return next(err);
+  }
 });
 
 router.post("/signup", (req, res) => {
